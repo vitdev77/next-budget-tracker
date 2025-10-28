@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { PiggyBank } from 'lucide-react';
+import Link from 'next/link';
 
 function Logo() {
   return (
