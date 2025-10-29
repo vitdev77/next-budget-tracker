@@ -49,7 +49,7 @@ function MobileNavbar() {
           <SheetContent className="w-full sm:w-135" side="left">
             <SheetHeader>
               <SheetTitle>
-                <Logo clickCallback={() => setIsOpen((prev) => !prev)} />
+                <Logo />
               </SheetTitle>
               <VisuallyHidden>
                 <SheetDescription></SheetDescription>
