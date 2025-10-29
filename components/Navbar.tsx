@@ -18,6 +18,7 @@ import {
 } from './ui/sheet';
 import { Menu } from 'lucide-react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import Container from './Container';
 
 function Navbar() {
   return (
@@ -39,42 +40,44 @@ function MobileNavbar() {
 
   return (
     <div className="block border-separate bg-background md:hidden">
-      <nav className="container flex items-center justify-between px-8">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button variant={'ghost'} size={'icon'}>
-              <Menu />
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-full sm:w-135" side="left">
-            <SheetHeader>
-              <SheetTitle>
-                <Logo />
-              </SheetTitle>
-              <VisuallyHidden>
-                <SheetDescription></SheetDescription>
-              </VisuallyHidden>
-            </SheetHeader>
-            <div className="flex flex-col gap-1 px-4">
-              {items.map((item) => (
-                <NavbarItem
-                  key={item.label}
-                  link={item.link}
-                  label={item.label}
-                  clickCallback={() => setIsOpen((prev) => !prev)}
-                />
-              ))}
-            </div>
-          </SheetContent>
-        </Sheet>
-        <div className="flex h-20 min-h-15 items-center gap-x-4">
-          <LogoMobile />
-        </div>
-        <div className="flex items-center gap-2">
-          <ThemeSwitcherBtn />
-          <UserButton />
-        </div>
-      </nav>
+      <Container>
+        <nav className="flex items-center justify-between">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant={'ghost'} size={'icon'}>
+                <Menu />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:w-135" side="left">
+              <SheetHeader>
+                <SheetTitle>
+                  <Logo />
+                </SheetTitle>
+                <VisuallyHidden>
+                  <SheetDescription></SheetDescription>
+                </VisuallyHidden>
+              </SheetHeader>
+              <div className="flex flex-col gap-1 px-4">
+                {items.map((item) => (
+                  <NavbarItem
+                    key={item.label}
+                    link={item.link}
+                    label={item.label}
+                    clickCallback={() => setIsOpen((prev) => !prev)}
+                  />
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+          <div className="flex h-20 min-h-15 items-center gap-x-4">
+            <LogoMobile />
+          </div>
+          <div className="flex items-center gap-2">
+            <ThemeSwitcherBtn />
+            <UserButton />
+          </div>
+        </nav>
+      </Container>
     </div>
   );
 }
@@ -82,24 +85,26 @@ function MobileNavbar() {
 function DesktopNavbar() {
   return (
     <div className="hidden border-separate border-b bg-background md:block">
-      <nav className="container flex items-center justify-between px-8">
-        <div className="flex h-20 min-h-15 items-center gap-x-4">
-          <Logo />
-          <div className="flex h-full">
-            {items.map((item) => (
-              <NavbarItem
-                key={item.label}
-                link={item.link}
-                label={item.label}
-              />
-            ))}
+      <Container>
+        <nav className="flex items-center justify-between">
+          <div className="flex h-20 min-h-15 items-center gap-x-4">
+            <Logo />
+            <div className="flex h-full">
+              {items.map((item) => (
+                <NavbarItem
+                  key={item.label}
+                  link={item.link}
+                  label={item.label}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <ThemeSwitcherBtn />
-          <UserButton />
-        </div>
-      </nav>
+          <div className="flex items-center gap-2">
+            <ThemeSwitcherBtn />
+            <UserButton />
+          </div>
+        </nav>
+      </Container>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 import CurrencyComboBox from '@/components/CurrencyComboBox';
+import Container from '@/components/Container';
 
 async function page() {
   const user = await currentUser();
@@ -22,7 +23,7 @@ async function page() {
   }
 
   return (
-    <div className="container flex max-w-2xl flex-col items-center justify-between gap-4">
+    <Container className="flex max-w-2xl flex-col items-center justify-between gap-4">
       <div>
         <h1 className="text-center text-3xl">
           Welcome, <span className="ml-2 font-bold">{user.firstName}! 👏</span>
@@ -53,7 +54,7 @@ async function page() {
       <div className="mt-8">
         <Logo />
       </div>
-    </div>
+    </Container>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { PiggyBank } from 'lucide-react';
 import Link from 'next/link';
 
