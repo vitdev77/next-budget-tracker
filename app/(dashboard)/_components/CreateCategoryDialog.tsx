@@ -10,8 +10,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,14 +35,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-// import data from '@emoji-mart/data';
-// import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CreateCategory } from '../_actions/categories';
+import { Category } from '@prisma/client';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
+import { useTheme } from 'next-themes';
 
 interface Props {
   type: TransactionType;
+  successCallback: (category: Category) => void;
 }
 
-function CreateCategoryDialog({ type }: Props) {
+function CreateCategoryDialog({ type, successCallback }: Props) {
   const [open, setOpen] = React.useState(false);
   const form = useForm<CreateCategorySchemaType>({
     resolver: zodResolver(CreateCategorySchema),
@@ -48,6 +57,46 @@ function CreateCategoryDialog({ type }: Props) {
       type,
     },
   });
+
+  const queryClient = useQueryClient();
+
+  const theme = useTheme();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: CreateCategory,
+    onSuccess: async (data: Category) => {
+      form.reset({
+        name: '',
+        icon: '',
+        type,
+      });
+
+      toast.success(`Category ${data.name} created successfully 🎉`, {
+        id: 'create-category',
+      });
+
+      successCallback(data);
+
+      await queryClient.invalidateQueries({
+        queryKey: ['categories'],
+      });
+
+      setOpen((prev) => !prev);
+    },
+    onError: () => {
+      toast.error('Something went wrong', {
+        id: 'create-category',
+      });
+    },
+  });
+
+  const onSubmit = React.useCallback(
+    (values: CreateCategorySchemaType) => {
+      toast.loading('Creating category...', { id: 'create-category' });
+      mutate(values);
+    },
+    [mutate]
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -78,7 +127,7 @@ function CreateCategoryDialog({ type }: Props) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="name"
@@ -86,10 +135,10 @@ function CreateCategoryDialog({ type }: Props) {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input defaultValue={''} {...field} />
+                    <Input placeholder="Category" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is the name of category
+                    This is how your category will appear in the app
                   </FormDescription>
                 </FormItem>
               )}
@@ -125,18 +174,39 @@ function CreateCategoryDialog({ type }: Props) {
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-full">
-                        {/* <Picker data={data} /> */}
+                        <Picker
+                          data={data}
+                          theme={theme.resolvedTheme}
+                          onEmojiSelect={(emoji: { native: string }) =>
+                            field.onChange(emoji.native)
+                          }
+                        />
                       </PopoverContent>
                     </Popover>
                   </FormControl>
                   <FormDescription>
-                    This is how your category will appear in the app
+                    This is how your category icon will appear in the app
                   </FormDescription>
                 </FormItem>
               )}
             />
           </form>
         </Form>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => form.reset()}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
+            {!isPending && 'Create'}
+            {isPending && <Spinner />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
