@@ -154,7 +154,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
                 <FormItem>
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input defaultValue={0} type={'number'} {...field} />
+                    <Input defaultValue={0} type="number" {...field} />
                   </FormControl>
                   <FormDescription>
                     Transaction amount (required)
@@ -212,7 +212,11 @@ function CreateTransactionDialog({ trigger, type }: Props) {
                         <Calendar
                           mode="single"
                           selected={field.value}
-                          onSelect={field.onChange}
+                          onSelect={(value) => {
+                            if (!value) return;
+                            console.log('@@@CALENDAR', value);
+                            field.onChange(value);
+                          }}
                           autoFocus
                         />
                       </PopoverContent>
