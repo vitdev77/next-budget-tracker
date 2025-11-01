@@ -35,14 +35,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateCategory } from '../_actions/categories';
 import { Category } from '@prisma/client';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { useTheme } from 'next-themes';
+import {
+  EmojiPicker,
+  EmojiPickerSearch,
+  EmojiPickerContent,
+  EmojiPickerFooter,
+} from '@/components/ui/emoji-picker';
 
 interface Props {
   type: TransactionType;
@@ -173,14 +177,16 @@ function CreateCategoryDialog({ type, successCallback }: Props) {
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-full">
-                        <Picker
-                          data={data}
-                          theme={theme.resolvedTheme}
-                          onEmojiSelect={(emoji: { native: string }) =>
-                            field.onChange(emoji.native)
-                          }
-                        />
+                      <PopoverContent className="w-fit p-0">
+                        <EmojiPicker
+                          columns={7}
+                          className="h-[366px]"
+                          onEmojiSelect={({ emoji }) => field.onChange(emoji)}
+                        >
+                          <EmojiPickerSearch />
+                          <EmojiPickerContent />
+                          <EmojiPickerFooter />
+                        </EmojiPicker>
                       </PopoverContent>
                     </Popover>
                   </FormControl>

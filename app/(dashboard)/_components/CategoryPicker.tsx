@@ -92,11 +92,12 @@ function CategoryPicker({ type, onChange }: Props) {
                       setValue(category.name);
                       setOpen((prev) => !prev);
                     }}
+                    className="justify-between"
                   >
                     <CategoryRow category={category} />
                     <Check
                       className={cn(
-                        'mr-2 size-4 opacity-0',
+                        'size-4 opacity-0',
                         value === category.name && 'opacity-100'
                       )}
                     />
