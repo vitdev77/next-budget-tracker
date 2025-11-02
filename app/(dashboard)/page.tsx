@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import CreateTransactionDialog from './_components/CreateTransactionDialog';
 import Overview from './_components/Overview';
+import History from './_components/History';
 
 async function page() {
   const user = await currentUser();
@@ -51,7 +52,10 @@ async function page() {
         </Container>
       </div>
 
-      <Overview userSettings={userSettings} />
+      <div className="flex flex-col gap-4">
+        <Overview userSettings={userSettings} />
+        <History userSettings={userSettings} />
+      </div>
     </div>
   );
 }

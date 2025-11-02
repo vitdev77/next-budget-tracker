@@ -10,6 +10,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { TransactionType } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface Props {
   from: Date;
@@ -69,7 +70,7 @@ function CategoriesCard({
   );
 
   return (
-    <Card className="h-90 w-full col-span-6">
+    <Card className="max-h-90 w-full col-span-6">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col text-2xl">
           {type === 'income' ? 'Incomes' : 'Expenses'} by category
@@ -78,7 +79,7 @@ function CategoriesCard({
 
       <div className="flex items-center justify-between gap-2">
         {filteredData.length === 0 && (
-          <div className="flex h-60 w-full flex-col items-center justify-center">
+          <div className="flex max-h-60 w-full flex-col items-center justify-center">
             No data for the selected period
             <p className="text-sm text-muted-foreground">
               Try selecting a different period or try adding new{' '}
@@ -88,7 +89,9 @@ function CategoriesCard({
         )}
 
         {filteredData.length > 0 && (
-          <ScrollArea className="h-60 w-full px-4">
+          <ScrollArea
+            className={cn('w-full px-4', filteredData.length > 3 && 'h-60')}
+          >
             <div className="flex w-full flex-col gap-4 p-4">
               {filteredData.map((item) => {
                 const amount = item._sum.amount || 0;
