@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 import { Category } from '@prisma/client';
 import DeleteCategoryDialog from '../_components/DeleteCategoryDialog';
 
-function page() {
+function ManagePage() {
   return (
     <>
       {/* HEADER */}
@@ -55,7 +55,7 @@ function page() {
   );
 }
 
-export default page;
+export default ManagePage;
 
 function CategoryList({ type }: { type: TransactionType }) {
   const categoriesQuery = useQuery({
@@ -144,7 +144,7 @@ function CategoryCard({ category }: { category: Category }) {
         category={category}
         trigger={
           <Button
-            className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground hover:bg-rose-500/20"
+            className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground hover:bg-rose-500/50 hover:text-white"
             variant={'secondary'}
           >
             <TrashIcon className="size-4" /> Remove
